@@ -3,7 +3,10 @@
     package="me.dylam.flashlight"
     android:versionCode="1"
     android:versionName="1.0" >
-
+    <permission android:name="android.permission.FLASHLIGHT"
+        android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
+        android:protectionLevel="normal"/>
+    <uses-permission android:name="android.permission.CAMERA" />
     <uses-sdk
         android:minSdkVersion="7"
         android:targetSdkVersion="16" />
