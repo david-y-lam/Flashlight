@@ -1,6 +1,9 @@
 package me.dylam.flashlight;
 
 import android.app.Activity;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -13,6 +16,7 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
     private static Camera mCam;
     private static String mTag = "MainActivity";
+    private static int mNotifyId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +29,14 @@ public class MainActivity extends Activity {
         }
 
         toggleOn();
+
+        // Create Notification and display it
+        Notification.Builder mBuilder = new Notification.Builder(this)
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle("Flashlight")
+                .setContentText("todo");
+        NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(mNotifyId, mBuilder.build());
     }
 
 
