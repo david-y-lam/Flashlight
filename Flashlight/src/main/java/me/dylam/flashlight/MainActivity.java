@@ -3,7 +3,10 @@ package me.dylam.flashlight;
 import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -28,13 +31,24 @@ public class MainActivity extends Activity {
             return;
         }
 
-        toggleOn();
+        //toggleOn();
 
         // Create Notification and display it
         Notification.Builder mBuilder = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("Flashlight")
                 .setContentText("todo");
+
+        Intent onReceive = new Intent(this, NotificationReceiver.class);
+        onReceive.setAction("ON");
+        PendingIntent pendingIntentOn = PendingIntent.getBroadcast(this,12345, onReceive, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.addAction(R.drawable.ic_launcher, "On", pendingIntentOn);
+
+        Intent offReceive = new Intent(this, NotificationReceiver.class);
+        offReceive.setAction("OFF");
+        PendingIntent pendingIntentOff = PendingIntent.getBroadcast(this,12345, offReceive, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.addAction(R.drawable.ic_launcher, "Off", pendingIntentOff);
+
         NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(mNotifyId, mBuilder.build());
     }
@@ -45,6 +59,23 @@ public class MainActivity extends Activity {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
+    }
+
+     public static class NotificationReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            Log.d(mTag, "Received notification with action:" + action );
+
+
+            if (action.equals("ON")) {
+                toggleOn();
+            } else if (action.equals("OFF")) {
+                toggleOff();
+            } else {
+                Log.d(mTag, "What happened here?");
+            }
+        }
     }
 
     public void toggleLightBtn(View v) {
