@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
             return;
         }
 
-        //toggleOn();
+        toggleOn();
 
         // Create Notification and display it
         Notification.Builder mBuilder = new Notification.Builder(this)
@@ -61,7 +61,7 @@ public class MainActivity extends Activity {
         return true;
     }
 
-     public static class NotificationReceiver extends BroadcastReceiver {
+     public class NotificationReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
