@@ -91,6 +91,7 @@ public class MainActivity extends Activity {
     }
 
     public void toggleOn() {
+        Toast.makeText(this, "toggle on!", Toast.LENGTH_SHORT).show();
         try {
             mCam = Camera.open();
             Camera.Parameters p = mCam.getParameters();
@@ -104,7 +105,10 @@ public class MainActivity extends Activity {
     }
 
     public void toggleOff() {
-        mCam.stopPreview();
-        mCam.release();
+        Toast.makeText(this, "toggle off!", Toast.LENGTH_SHORT).show();
+        if (mCam) {
+            mCam.stopPreview();
+            mCam.release();
+        }
     }
 }
