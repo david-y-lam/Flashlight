@@ -106,7 +106,7 @@ public class MainActivity extends Activity {
 
     public void toggleOff() {
         Toast.makeText(this, "toggle off!", Toast.LENGTH_SHORT).show();
-        if (mCam) {
+        if (mCam != null) {
             mCam.stopPreview();
             mCam.release();
         }
