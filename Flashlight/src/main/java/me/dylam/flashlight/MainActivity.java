@@ -24,6 +24,7 @@ public class MainActivity extends Activity {
     private NotificationReceiver mReceiver;
     private static String notifyOn = "me.dylam.flashlight.ON";
     private static String notifyOff= "me.dylam.flashlight.OFF";
+    private static String notifyExit= "me.dylam.flashlight.EXIT";
     private NotificationManager mNotificationManager;
 
     @Override
@@ -43,13 +44,15 @@ public class MainActivity extends Activity {
         IntentFilter i = new IntentFilter();
         i.addAction(notifyOn);
         i.addAction(notifyOff);
+        i.addAction(notifyExit);
         registerReceiver(mReceiver, i);
 
         // Create Notification and display it
         Notification.Builder mBuilder = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("Flashlight")
-                .setContentText("todo");
+                .setContentText("todo")
+                .setOngoing(true);
 
         Intent onReceive = new Intent(notifyOn);
         PendingIntent pendingIntentOn = PendingIntent.getBroadcast(this, 12345, onReceive, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -58,6 +61,10 @@ public class MainActivity extends Activity {
         Intent offReceive = new Intent(notifyOff);
         PendingIntent pendingIntentOff = PendingIntent.getBroadcast(this, 12345, offReceive, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.addAction(R.drawable.ic_launcher, "Off", pendingIntentOff);
+
+        Intent exitReceive = new Intent(notifyExit);
+        PendingIntent pendingIntentExit = PendingIntent.getBroadcast(this, 12345, exitReceive, PendingIntent.FLAG_UPDATE_CURRENT);
+        mBuilder.addAction(R.drawable.ic_launcher, "Quit", pendingIntentExit);
 
         mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(mNotifyId, mBuilder.build());
@@ -85,12 +92,14 @@ public class MainActivity extends Activity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            Log.d(mTag, "Received notification with action:" + action );
+            Log.d(mTag, "Received notification with action:" + action);
 
             if (action.equals(notifyOn)) {
                 toggleOn();
             } else if (action.equals(notifyOff)) {
                 toggleOff();
+            } else if (action.equals(notifyExit)) {
+                finish();
             } else {
                 Log.d(mTag, "NotificationReceiver received invalid action");
             }
@@ -110,7 +119,7 @@ public class MainActivity extends Activity {
     }
 
     public void toggleOn() {
-        Toast.makeText(this, "toggle on!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "toggle on!", Toast.LENGTH_SHORT).show();
         if (mCam != null) {
             Log.d(mTag, "Camera already on!");
             return;
@@ -129,7 +138,7 @@ public class MainActivity extends Activity {
     }
 
     public void toggleOff() {
-        Toast.makeText(this, "toggle off!", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "toggle off!", Toast.LENGTH_SHORT).show();
         if (mCam != null) {
             mCam.stopPreview();
             mCam.release();
