@@ -16,7 +16,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <receiver android:name=".MainActivity$NotificationReceiver"/>
+
         <activity
             android:name="me.dylam.flashlight.MainActivity"
             android:label="@string/app_name"

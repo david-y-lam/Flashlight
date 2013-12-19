@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.hardware.Camera;
 import android.os.Bundle;
@@ -20,6 +21,10 @@ public class MainActivity extends Activity {
     private static Camera mCam;
     private static String mTag = "MainActivity";
     private static int mNotifyId = 0;
+    private NotificationReceiver mReceiver;
+    private static String notifyOn = "me.dylam.flashlight.ON";
+    private static String notifyOff= "me.dylam.flashlight.OFF";
+    private NotificationManager mNotificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,26 +38,41 @@ public class MainActivity extends Activity {
 
         toggleOn();
 
+        // Create receiver and register it
+        mReceiver = new NotificationReceiver();
+        IntentFilter i = new IntentFilter();
+        i.addAction(notifyOn);
+        i.addAction(notifyOff);
+        registerReceiver(mReceiver, i);
+
         // Create Notification and display it
         Notification.Builder mBuilder = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("Flashlight")
                 .setContentText("todo");
 
-        Intent onReceive = new Intent(this, NotificationReceiver.class);
-        onReceive.setAction("ON");
-        PendingIntent pendingIntentOn = PendingIntent.getBroadcast(this,12345, onReceive, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent onReceive = new Intent(notifyOn);
+        PendingIntent pendingIntentOn = PendingIntent.getBroadcast(this, 12345, onReceive, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.addAction(R.drawable.ic_launcher, "On", pendingIntentOn);
 
-        Intent offReceive = new Intent(this, NotificationReceiver.class);
-        offReceive.setAction("OFF");
-        PendingIntent pendingIntentOff = PendingIntent.getBroadcast(this,12345, offReceive, PendingIntent.FLAG_UPDATE_CURRENT);
+        Intent offReceive = new Intent(notifyOff);
+        PendingIntent pendingIntentOff = PendingIntent.getBroadcast(this, 12345, offReceive, PendingIntent.FLAG_UPDATE_CURRENT);
         mBuilder.addAction(R.drawable.ic_launcher, "Off", pendingIntentOff);
 
-        NotificationManager mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(mNotifyId, mBuilder.build());
     }
 
+    @Override
+    protected void onDestroy() {
+        toggleOff();
+
+        // Clean up
+        unregisterReceiver(mReceiver);
+        mNotificationManager.cancelAll();
+
+        super.onDestroy();
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -67,13 +87,12 @@ public class MainActivity extends Activity {
             String action = intent.getAction();
             Log.d(mTag, "Received notification with action:" + action );
 
-
-            if (action.equals("ON")) {
+            if (action.equals(notifyOn)) {
                 toggleOn();
-            } else if (action.equals("OFF")) {
+            } else if (action.equals(notifyOff)) {
                 toggleOff();
             } else {
-                Log.d(mTag, "What happened here?");
+                Log.d(mTag, "NotificationReceiver received invalid action");
             }
         }
     }
@@ -92,6 +111,11 @@ public class MainActivity extends Activity {
 
     public void toggleOn() {
         Toast.makeText(this, "toggle on!", Toast.LENGTH_SHORT).show();
+        if (mCam != null) {
+            Log.d(mTag, "Camera already on!");
+            return;
+        }
+
         try {
             mCam = Camera.open();
             Camera.Parameters p = mCam.getParameters();
@@ -109,6 +133,7 @@ public class MainActivity extends Activity {
         if (mCam != null) {
             mCam.stopPreview();
             mCam.release();
+            mCam = null;
         }
     }
 }
