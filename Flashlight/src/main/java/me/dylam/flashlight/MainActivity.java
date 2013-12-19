@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 public class MainActivity extends Activity {
     private static Camera mCam;
@@ -26,6 +27,7 @@ public class MainActivity extends Activity {
     private static String notifyOff= "me.dylam.flashlight.OFF";
     private static String notifyExit= "me.dylam.flashlight.EXIT";
     private NotificationManager mNotificationManager;
+    private ToggleButton mToggleButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +38,8 @@ public class MainActivity extends Activity {
             Toast.makeText(this, "No light. :(",Toast.LENGTH_LONG).show();
             finish();
         }
+
+        mToggleButton = (ToggleButton)findViewById(R.id.toggleButton);
 
         toggleOn();
 
@@ -126,6 +130,7 @@ public class MainActivity extends Activity {
         }
 
         try {
+            mToggleButton.setChecked(true);
             mCam = Camera.open();
             Camera.Parameters p = mCam.getParameters();
             p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
@@ -140,6 +145,7 @@ public class MainActivity extends Activity {
     public void toggleOff() {
         //Toast.makeText(this, "toggle off!", Toast.LENGTH_SHORT).show();
         if (mCam != null) {
+            mToggleButton.setChecked(false);
             mCam.stopPreview();
             mCam.release();
             mCam = null;
