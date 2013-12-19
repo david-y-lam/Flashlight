@@ -33,8 +33,8 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         if (!this.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
-            Toast.makeText(this, "No light. :(",Toast.LENGTH_SHORT).show();
-            return;
+            Toast.makeText(this, "No light. :(",Toast.LENGTH_LONG).show();
+            finish();
         }
 
         toggleOn();
