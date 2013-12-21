@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -115,7 +114,7 @@ public class MainActivity extends Activity {
         // Toast.makeText(this, ((TextView)v).getText().toString(),Toast.LENGTH_SHORT).show();
 
         // React appropiately
-        if (((TextView)v).getText().toString().equals("ON")) {
+        if (mToggleButton.isChecked()) {
             toggleOn();
         } else {
             toggleOff();
