@@ -110,9 +110,6 @@ public class MainActivity extends Activity {
     }
 
     public void toggleLightBtn(View v) {
-        // Get text
-        // Toast.makeText(this, ((TextView)v).getText().toString(),Toast.LENGTH_SHORT).show();
-
         // React appropiately
         if (mToggleButton.isChecked()) {
             toggleOn();
@@ -122,13 +119,13 @@ public class MainActivity extends Activity {
     }
 
     public void toggleOn() {
-        //Toast.makeText(this, "toggle on!", Toast.LENGTH_SHORT).show();
         if (mCam != null) {
             Log.d(mTag, "Camera already on!");
             return;
         }
 
         try {
+            Log.d(mTag, "Turning light on.");
             mToggleButton.setChecked(true);
             mCam = Camera.open();
             Camera.Parameters p = mCam.getParameters();
@@ -142,8 +139,8 @@ public class MainActivity extends Activity {
     }
 
     public void toggleOff() {
-        //Toast.makeText(this, "toggle off!", Toast.LENGTH_SHORT).show();
         if (mCam != null) {
+            Log.d(mTag, "Turning light off.");
             mToggleButton.setChecked(false);
             mCam.stopPreview();
             mCam.release();
