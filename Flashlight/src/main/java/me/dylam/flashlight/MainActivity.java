@@ -110,6 +110,8 @@ public class MainActivity extends Activity {
     }
 
     public void toggleLightBtn(View v) {
+        Log.d(mTag, "Button clicked!");
+
         // React appropiately
         if (mToggleButton.isChecked()) {
             toggleOn();
