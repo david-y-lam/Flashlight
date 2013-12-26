@@ -38,6 +38,8 @@ public class MainActivity extends Activity {
             finish();
         }
 
+        Log.d(mTag, "In onCreate");
+        
         mToggleButton = (ToggleButton)findViewById(R.id.toggleButton);
 
         toggleOn();
@@ -75,6 +77,8 @@ public class MainActivity extends Activity {
 
     @Override
     protected void onDestroy() {
+        Log.d(mTag, "In onDestroy. About to cleanup.");
+
         toggleOff();
 
         // Clean up
