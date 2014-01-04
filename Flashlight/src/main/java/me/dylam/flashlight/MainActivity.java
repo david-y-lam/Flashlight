@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
         Notification.Builder mBuilder = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("Flashlight")
-                .setContentText("todo")
+                .setContentText("")
                 .setOngoing(true);
 
         Intent onReceive = new Intent(notifyOn);
