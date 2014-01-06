@@ -55,8 +55,8 @@ public class MainActivity extends Activity {
         Notification.Builder mBuilder = new Notification.Builder(this)
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("Flashlight")
-                .setContentText("")
-                .setOngoing(true);
+                .setContentText("");
+
 
         Intent onReceive = new Intent(notifyOn);
         PendingIntent pendingIntentOn = PendingIntent.getBroadcast(this, 12345, onReceive, PendingIntent.FLAG_UPDATE_CURRENT);
